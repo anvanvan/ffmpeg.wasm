@@ -188,9 +188,12 @@ export class FFmpeg {
     { signal }: FFMessageOptions = {}
   ): Promise<IsFirst> => {
     if (!this.#worker) {
-      this.#worker = new Worker(new URL("./worker.js", import.meta.url), {
-        type: "module",
-      });
+      this.#worker = new Worker(
+        config.workerURL ?? new URL("./worker.js", import.meta.url),
+        {
+          type: "module",
+        }
+      );
       this.#registerHandlers();
     }
     return this.#send(
@@ -297,7 +300,11 @@ export class FFmpeg {
     ) as Promise<OK>;
   };
 
-  public mount = (fsType: FFFSType, options: FFFSMountOptions, mountPoint: FFFSPath, ): Promise<OK> => {
+  public mount = (
+    fsType: FFFSType,
+    options: FFFSMountOptions,
+    mountPoint: FFFSPath
+  ): Promise<OK> => {
     const trans: Transferable[] = [];
     return this.#send(
       {
