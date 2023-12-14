@@ -100,7 +100,9 @@ export class FFmpeg {
      */
     load = (config = {}, { signal } = {}) => {
         if (!this.#worker) {
-            this.#worker = new Worker(config.workerURL ?? new URL("./worker.js", import.meta.url), {
+            this.#worker = new Worker(config.workerURL
+                ? new URL(config.workerURL)
+                : new URL("./worker.js", import.meta.url), {
                 type: "module",
             });
             this.#registerHandlers();
